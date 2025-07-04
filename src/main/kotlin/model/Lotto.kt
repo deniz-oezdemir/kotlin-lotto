@@ -5,8 +5,12 @@ class Lotto(val purchaseAmount: Int) {
     val tickets = mutableListOf<MutableList<Int>>()
 
     init {
-        require(purchaseAmount % PURCHASE_AMOUNT_UNIT == 0) { ERROR_INVALID_UNIT }
+        require(isDivisibleByUnit(purchaseAmount)) { ERROR_INVALID_UNIT }
         numberOfTickets = purchaseAmount / PURCHASE_AMOUNT_UNIT
+    }
+
+    private fun isDivisibleByUnit(purchaseAmount: Int): Boolean {
+        return purchaseAmount % PURCHASE_AMOUNT_UNIT == 0
     }
 
     fun generateTickets() {

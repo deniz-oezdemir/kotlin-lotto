@@ -20,17 +20,17 @@ object Statistics {
         return matches
     }
 
-    fun calculateWinningAmount(matchResult: List<Int>): Int {
-        return Rank.entries.withIndex().sumOf { (index, rank) ->
-            matchResult.getOrElse(index) { 0 } * rank.winningMoney
-        }
-    }
-
     fun calculateWinningStatistic(
         purchaseAmount: Int,
         matchResult: List<Int>,
     ): Float {
         val winningAmount = calculateWinningAmount(matchResult)
         return (winningAmount.toFloat() / purchaseAmount.toFloat())
+    }
+
+    fun calculateWinningAmount(matchResult: List<Int>): Int {
+        return Rank.entries.withIndex().sumOf { (index, rank) ->
+            matchResult.getOrElse(index) { 0 } * rank.winningMoney
+        }
     }
 }
