@@ -7,7 +7,7 @@ class WinningStatistics {
     @Test
     fun `test winning amount`() {
         val results = listOf<Int>(1, 1, 1, 1, 1)
-        assertEquals(2031555000, Statistics.calculateWinningAmount(results))
+        assertEquals(2_031_555_000, Statistics.calculateWinningAmount(results))
     }
 
     @Test

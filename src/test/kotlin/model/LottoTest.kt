@@ -57,7 +57,7 @@ class LottoTest {
         val ticket = lotto.fillTicket()
 
         for (number in ticket) {
-            assertTrue(number >= 1 && number <= 45, "Number $number is not in valid range 1-45")
+            assertTrue(number in 1..45, "Number $number is not in valid range 1-45")
         }
     }
 }
