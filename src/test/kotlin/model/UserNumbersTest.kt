@@ -3,12 +3,11 @@ package model
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import view.InputView
 
-class WinningAndBonusNumbersTest {
+class UserNumbersTest {
     companion object {
         @JvmStatic
-        fun invalidLists() =
+        fun invalidMainNumbers() =
             listOf(
                 listOf(1, 2, 3, 4, 5, 5),
                 listOf(1, 2, 3, 4),
@@ -16,25 +15,29 @@ class WinningAndBonusNumbersTest {
             )
 
         @JvmStatic
-        fun invalidBonusNumbers() = listOf(6, -1, 46)
+        fun invalidBonusNumbers() =
+            listOf(
+                0,
+                46,
+                5,
+            )
     }
 
     @ParameterizedTest
-    @MethodSource("invalidLists")
-    fun `invalid winning numbers`(numbers: List<Int>) {
+    @MethodSource("invalidMainNumbers")
+    fun `invalid main numbers throw exception`(numbers: List<Int>) {
         assertThrows<IllegalArgumentException> {
-            val inputView = InputView()
-            inputView.validateWinningNumbers(numbers)
+            UserMainNumbers.of(numbers)
         }
     }
 
     @ParameterizedTest
     @MethodSource("invalidBonusNumbers")
-    fun `invalid bonus number`(invalidBonusNumbers: Int) {
+    fun `invalid bonus number throws exception`(bonus: Int) {
+        val mainNumbers = UserMainNumbers.of(listOf(1, 2, 3, 4, 5, 6))
+
         assertThrows<IllegalArgumentException> {
-            val validList = listOf(1, 2, 3, 4, 5, 6)
-            val inputView = InputView()
-            inputView.validateBonusNumber(invalidBonusNumbers, validList)
+            UserBonusNumber.of(bonus, mainNumbers)
         }
     }
 }

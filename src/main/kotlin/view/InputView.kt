@@ -1,6 +1,8 @@
 package view
 
 import model.Lotto
+import model.UserBonusNumber
+import model.UserMainNumbers
 
 class InputView {
     private fun readLineOrRetry(prompt: String): String {
@@ -10,7 +12,7 @@ class InputView {
             if (input != null) {
                 return input
             } else {
-                println(ErrorMessage.RETRY_INPUT_MESSAGE)
+                println(PromptMessage.RETRY_INPUT_MESSAGE)
             }
         }
     }
@@ -21,12 +23,12 @@ class InputView {
 
     fun getPurchaseAmount(): Int {
         while (true) {
-            val input = readLineOrRetry(ErrorMessage.GET_PURCHASE_AMOUNT.toString())
+            val input = readLineOrRetry(PromptMessage.GET_PURCHASE_AMOUNT.message)
             val amount = parsePurchaseAmount(input)
-            if (amount != null) {
+            if (amount != null && amount % Lotto.PURCHASE_AMOUNT_UNIT == 0) {
                 return amount
             } else {
-                println(ErrorMessage.INVALID_INPUT_MESSAGE)
+                println(ErrorMessage.ERROR_INVALID_UNIT.message)
             }
         }
     }
@@ -36,56 +38,28 @@ class InputView {
             input.split(",")
                 .map { it.trim().toInt() }
         } catch (e: NumberFormatException) {
-            throw IllegalArgumentException(ErrorMessage.ERROR_INVALID_DIGITS.toString())
+            throw IllegalArgumentException(ErrorMessage.ERROR_INVALID_DIGITS.message)
         }
     }
 
-    fun isValidRange(numbers: List<Int>): Boolean {
-        return numbers.all { it in 1..45 }
-    }
-
-    fun hasNoDuplicates(numbers: List<Int>): Boolean {
-        return numbers.toSet().size == numbers.size
-    }
-
-    fun hasProperSize(numbers: List<Int>): Boolean {
-        return numbers.size == Lotto.TICKET_LENGTH
-    }
-
-    fun validateWinningNumbers(winningNumbers: List<Int>) {
-        require(isValidRange(winningNumbers)) { ErrorMessage.ERROR_BONUS_RANGE }
-        require(hasNoDuplicates(winningNumbers)) { ErrorMessage.ERROR_DUPLICATE }
-        require(hasProperSize(winningNumbers)) { ErrorMessage.ERROR_NUMBERSET_SIZE }
-    }
-
-    fun getWinningNumbers(): List<Int> {
+    fun getWinningNumbers(): UserMainNumbers {
         while (true) {
-            val input = readLineOrRetry(ErrorMessage.GET_WINNING_NUMBERS.toString())
+            val input = readLineOrRetry(PromptMessage.GET_WINNING_NUMBERS.message)
             try {
                 val winningNumbers = convertWinningNumbers(input)
-                validateWinningNumbers(winningNumbers)
-                return winningNumbers
+                return UserMainNumbers.of(winningNumbers)
             } catch (e: IllegalArgumentException) {
                 println(e.message)
             }
         }
     }
 
-    fun validateBonusNumber(
-        bonusNumber: Int,
-        winningNumbers: List<Int>,
-    ) {
-        require(bonusNumber in Lotto.TICKET_NUMBER_MINIMUM..Lotto.TICKET_NUMBER_MAXIMUM) { ErrorMessage.ERROR_BONUS_RANGE }
-        require(!winningNumbers.contains(bonusNumber)) { ErrorMessage.ERROR_DUPLICATE }
-    }
-
-    fun getBonusNumber(winningNumbers: List<Int>): Int {
+    fun getBonusNumber(winningNumbers: UserMainNumbers): Int {
         while (true) {
-            val input = readLineOrRetry(ErrorMessage.GET_BONUS_NUMBERS.toString())
+            val input = readLineOrRetry(PromptMessage.GET_BONUS_NUMBERS.message)
             try {
-                val bonusNumber = input.toInt()
-                validateBonusNumber(bonusNumber, winningNumbers)
-                return bonusNumber
+                val bonus = input.toInt()
+                return UserBonusNumber.of(bonus, winningNumbers)
             } catch (e: IllegalArgumentException) {
                 println(e.message)
             }

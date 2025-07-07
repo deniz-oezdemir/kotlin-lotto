@@ -2,6 +2,7 @@ package controller
 
 import model.Lotto
 import model.Statistics
+import model.WinningNumbers
 import view.InputView
 import view.OutputView
 
@@ -11,8 +12,9 @@ class Controller {
         outputView: OutputView,
     ) {
         val lotto = handleLottoPurchase(inputView, outputView)
-        val (winningNumbers, bonusNumber) = handleWinningNumbers(inputView, outputView)
-        handleResultDisplay(lotto, winningNumbers, bonusNumber, outputView)
+        val (mainNumbers, bonusNumber) = handleWinningNumbers(inputView, outputView)
+        val winningNumbers = WinningNumbers(mainNumbers, bonusNumber)
+        handleResultDisplay(lotto, winningNumbers, outputView)
     }
 
     private fun handleLottoPurchase(
@@ -32,20 +34,19 @@ class Controller {
         inputView: InputView,
         outputView: OutputView,
     ): Pair<List<Int>, Int> {
-        val winningNumbers = inputView.getWinningNumbers()
-        outputView.displayWinningNumbers(winningNumbers)
-        val bonusNumber = inputView.getBonusNumber(winningNumbers)
+        val userMainNumbers = inputView.getWinningNumbers()
+        outputView.displayWinningNumbers(userMainNumbers.numbers)
+        val bonusNumber = inputView.getBonusNumber(userMainNumbers)
         outputView.displayBonusNumber(bonusNumber)
-        return Pair(winningNumbers, bonusNumber)
+        return Pair(userMainNumbers.numbers, bonusNumber)
     }
 
     private fun handleResultDisplay(
         lotto: Lotto,
-        winningNumbers: List<Int>,
-        bonusNumber: Int,
+        winningNumbers: WinningNumbers,
         outputView: OutputView,
     ) {
-        val matchResult = Statistics.calculateMatchResults(lotto, winningNumbers, bonusNumber)
+        val matchResult = Statistics.calculateMatchResults(lotto, winningNumbers)
         outputView.displayMatchResults(matchResult)
         val winningStatistic = Statistics.calculateWinningStatistic(lotto.purchaseAmount, matchResult)
         outputView.displayWinningStatistic(winningStatistic)
