@@ -2,6 +2,8 @@ package controller
 
 import model.Lotto
 import model.Statistics
+import model.UserBonusNumber
+import model.UserMainNumbers
 import model.WinningNumbers
 import view.InputView
 import view.OutputView
@@ -22,8 +24,12 @@ class Controller {
         outputView: OutputView,
     ): Lotto {
         val purchaseAmount = inputView.getPurchaseAmount()
-        val lotto = Lotto(purchaseAmount)
-        outputView.displayPurchaseAmount(lotto)
+        outputView.displayAmount(purchaseAmount)
+        val manualTicketsAmount = inputView.getManualTicketsAmount()
+        outputView.displayAmount(manualTicketsAmount)
+        val manualTickets = inputView.getManualTickets(manualTicketsAmount)
+        outputView.displayManualTickets(manualTickets)
+        val lotto = Lotto(purchaseAmount, manualTicketsAmount, manualTickets)
         outputView.displayNumberOfLottoTickets(lotto)
         lotto.generateTickets()
         outputView.displayTickets(lotto)
@@ -33,12 +39,12 @@ class Controller {
     private fun handleWinningNumbers(
         inputView: InputView,
         outputView: OutputView,
-    ): Pair<List<Int>, Int> {
+    ): Pair<UserMainNumbers, UserBonusNumber> {
         val userMainNumbers = inputView.getWinningNumbers()
-        outputView.displayWinningNumbers(userMainNumbers.numbers)
+        outputView.displayTicketNumbers(userMainNumbers.numbers)
         val bonusNumber = inputView.getBonusNumber(userMainNumbers)
         outputView.displayBonusNumber(bonusNumber)
-        return Pair(userMainNumbers.numbers, bonusNumber)
+        return Pair(userMainNumbers, bonusNumber)
     }
 
     private fun handleResultDisplay(

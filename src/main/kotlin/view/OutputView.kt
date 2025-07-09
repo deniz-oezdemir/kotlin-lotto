@@ -1,14 +1,20 @@
 package view
 
 import model.Lotto
+import model.LottoNumber
+import model.Tickets
+import model.UserBonusNumber
 
 class OutputView {
-    fun displayPurchaseAmount(lotto: Lotto) {
-        println("${lotto.purchaseAmount}")
+    fun displayAmount(amount: Int) {
+        println("$amount\n")
     }
 
     fun displayNumberOfLottoTickets(lotto: Lotto) {
-        println("You have purchased ${lotto.numberOfTickets} tickets.")
+        println(
+            "You have purchased ${lotto.manualTicketAmount} manual and" +
+                "${lotto.numberOfTickets - lotto.manualTicketAmount} automatic tickets.",
+        )
     }
 
     fun displayTickets(lotto: Lotto) {
@@ -18,17 +24,24 @@ class OutputView {
         println()
     }
 
-    fun displayWinningNumbers(winningNumbers: List<Int>) {
-        for (winningNumber in winningNumbers) {
-            if (winningNumbers.last() != winningNumber) {
-                print("$winningNumber, ")
+    fun displayManualTickets(manualTickets: Tickets) {
+        manualTickets.ticketList.forEach {
+            println(it.toCompactString())
+        }
+        println()
+    }
+
+    fun displayTicketNumbers(numbers: List<LottoNumber>) {
+        for (number in numbers) {
+            if (numbers.last() != number) {
+                print("$number, ")
             } else {
-                println("$winningNumber")
+                println("$number")
             }
         }
     }
 
-    fun displayBonusNumber(bonusNumber: Int) {
+    fun displayBonusNumber(bonusNumber: UserBonusNumber) {
         println("$bonusNumber\n")
     }
 

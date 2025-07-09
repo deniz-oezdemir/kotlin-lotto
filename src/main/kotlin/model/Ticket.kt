@@ -18,4 +18,9 @@ class Ticket(private val values: List<Int>) {
     override fun toString(): String {
         return values.sorted().joinToString(", ", prefix = "[", postfix = "]")
     }
+
+    fun toCompactString(): String {
+        return values.sorted()
+            .joinToString(", ")
+    }
 }

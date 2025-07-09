@@ -7,7 +7,14 @@ object Statistics {
     ): List<Int> {
         val matches = MutableList(6) { 0 }
         for (ticket in lotto.tickets.ticketList) {
-            when (Rank.valueOfEachTicket(ticket, winningNumbers.mainNumbers, winningNumbers.bonusNumber)) {
+            val rank =
+                Rank.valueOfEachTicket(
+                    ticket,
+                    winningNumbers.mainNumbers.numbers.map { it.number },
+                    winningNumbers.bonusNumber.bonusNumber.number,
+                )
+
+            when (rank) {
                 Rank.FIRST -> matches[0] += 1
                 Rank.SECOND -> matches[1] += 1
                 Rank.THIRD -> matches[2] += 1
