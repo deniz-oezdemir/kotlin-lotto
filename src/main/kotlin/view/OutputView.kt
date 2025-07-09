@@ -12,7 +12,7 @@ class OutputView {
 
     fun displayNumberOfLottoTickets(lotto: Lotto) {
         println(
-            "You have purchased ${lotto.manualTicketAmount} manual and" +
+            "You have purchased ${lotto.manualTicketAmount} manual and " +
                 "${lotto.numberOfTickets - lotto.manualTicketAmount} automatic tickets.",
         )
     }

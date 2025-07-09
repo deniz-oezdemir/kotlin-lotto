@@ -1,16 +1,16 @@
 package view
 
-import model.Lotto
 import model.Ticket
 import model.Tickets
 import model.UserBonusNumber
 import model.UserMainNumbers
+import model.Validator
 
 class InputView {
     private fun readLineOrRetry(prompt: String): String {
         while (true) {
             print(prompt)
-            val input = readLine()
+            val input = readlnOrNull()
             if (input != null) {
                 return input
             } else {
@@ -66,7 +66,7 @@ class InputView {
         while (true) {
             val input = readLineOrRetry(PromptMessage.GET_PURCHASE_AMOUNT.message)
             val amount = parsePurchaseAmount(input)
-            if (amount != null && amount % Lotto.PURCHASE_AMOUNT_UNIT == 0) {
+            if (amount != null && Validator.amountIsValidUnit(amount)) {
                 return amount
             } else {
                 println(ErrorMessage.ERROR_INVALID_UNIT.message)
