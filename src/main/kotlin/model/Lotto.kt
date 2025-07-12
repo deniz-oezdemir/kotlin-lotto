@@ -1,14 +1,16 @@
 package model
 
-class Lotto(val purchaseAmount: Int, val manualTicketAmount: Int, val manualTickets: Tickets) {
+class Lotto(
+    val purchaseAmount: Int,
+    val manualTickets: Tickets,
+) {
     val numberOfTickets: Int = purchaseAmount / PURCHASE_AMOUNT_UNIT
     var tickets = manualTickets
 
-    fun generateTickets() {
-        var count = manualTicketAmount
-        while (count < numberOfTickets) {
+    fun generateTickets(manualTicketAmount: TicketCount) {
+        val ticketsToGenerate = numberOfTickets - manualTicketAmount.value
+        repeat(ticketsToGenerate) {
             tickets.add(fillTicket())
-            count += 1
         }
     }
 

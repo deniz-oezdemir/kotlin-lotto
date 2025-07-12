@@ -16,5 +16,7 @@ data class UserBonusNumber(val bonusNumber: LottoNumber) {
         }
     }
 
+    fun value(): Int = bonusNumber.number
+
     override fun toString(): String = bonusNumber.toString()
 }

@@ -2,6 +2,7 @@ package view
 
 import model.Lotto
 import model.LottoNumber
+import model.TicketCount
 import model.Tickets
 import model.UserBonusNumber
 
@@ -10,10 +11,13 @@ class OutputView {
         println("$amount\n")
     }
 
-    fun displayNumberOfLottoTickets(lotto: Lotto) {
+    fun displayNumberOfLottoTickets(
+        lotto: Lotto,
+        manualTickets: TicketCount,
+    ) {
         println(
-            "You have purchased ${lotto.manualTicketAmount} manual and " +
-                "${lotto.numberOfTickets - lotto.manualTicketAmount} automatic tickets.",
+            "You have purchased ${manualTickets.value} manual and " +
+                "${lotto.numberOfTickets - manualTickets.value} automatic tickets.",
         )
     }
 

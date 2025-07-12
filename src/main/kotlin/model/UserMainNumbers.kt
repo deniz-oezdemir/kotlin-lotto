@@ -19,6 +19,8 @@ class UserMainNumbers private constructor(
         }
     }
 
+    fun asIntList(): List<Int> = numbers.map { it.number }
+
     override fun toString(): String =
         numbers.sortedBy { it.number }
             .joinToString(", ", prefix = "[", postfix = "]")

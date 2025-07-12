@@ -1,6 +1,7 @@
 package view
 
 import model.Ticket
+import model.TicketCount
 import model.Tickets
 import model.UserBonusNumber
 import model.UserMainNumbers
@@ -19,19 +20,27 @@ class InputView {
         }
     }
 
-    fun getManualTicketsAmount(): Int {
+    private fun parseTicketAmount(input: String): Int {
+        val input = input.toIntOrNull()
+        if (input != null) {
+            return input
+        }
+        throw IllegalArgumentException()
+    }
+
+    fun getManualTicketsAmount(): TicketCount {
         while (true) {
             val input = readLineOrRetry(PromptMessage.GET_MANUAL_AMOUNT.message)
-            val amount = parsePurchaseAmount(input)
-            if (amount != null && amount > 0) {
-                return amount
-            } else {
-                println(ErrorMessage.ERROR_INVALID_AMOUNT.message)
+            try {
+                val amount = parseTicketAmount(input)
+                return TicketCount(amount)
+            } catch (e: IllegalArgumentException) {
+                println(e.message)
             }
         }
     }
 
-    fun getManualNumbers(): List<Int> {
+    private fun getManualNumbers(): List<Int> {
         while (true) {
             val input = readLineOrRetry("")
             try {
@@ -42,11 +51,11 @@ class InputView {
         }
     }
 
-    fun getManualTickets(manualTicketsAmount: Int): Tickets {
+    fun getManualTickets(manualTicketsAmount: TicketCount): Tickets {
         val manualTickets = Tickets()
         var count = 0
         println(PromptMessage.GET_MANUAL_NUMBERS.message)
-        while (count < manualTicketsAmount) {
+        while (count < manualTicketsAmount.value) {
             val input = getManualNumbers()
             try {
                 manualTickets.add(Ticket(input))

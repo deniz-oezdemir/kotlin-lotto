@@ -10,8 +10,8 @@ object Statistics {
             val rank =
                 Rank.valueOfEachTicket(
                     ticket,
-                    winningNumbers.mainNumbers.numbers.map { it.number },
-                    winningNumbers.bonusNumber.bonusNumber.number,
+                    winningNumbers.mainNumbers.asIntList(),
+                    winningNumbers.bonusNumber.value(),
                 )
 
             when (rank) {

@@ -2,8 +2,6 @@ package controller
 
 import model.Lotto
 import model.Statistics
-import model.UserBonusNumber
-import model.UserMainNumbers
 import model.WinningNumbers
 import view.InputView
 import view.OutputView
@@ -14,8 +12,7 @@ class Controller {
         outputView: OutputView,
     ) {
         val lotto = handleLottoPurchase(inputView, outputView)
-        val (mainNumbers, bonusNumber) = handleWinningNumbers(inputView, outputView)
-        val winningNumbers = WinningNumbers(mainNumbers, bonusNumber)
+        val winningNumbers = handleWinningNumbers(inputView, outputView)
         handleResultDisplay(lotto, winningNumbers, outputView)
     }
 
@@ -26,12 +23,12 @@ class Controller {
         val purchaseAmount = inputView.getPurchaseAmount()
         outputView.displayAmount(purchaseAmount)
         val manualTicketsAmount = inputView.getManualTicketsAmount()
-        outputView.displayAmount(manualTicketsAmount)
+        outputView.displayAmount(manualTicketsAmount.value)
         val manualTickets = inputView.getManualTickets(manualTicketsAmount)
         outputView.displayManualTickets(manualTickets)
-        val lotto = Lotto(purchaseAmount, manualTicketsAmount, manualTickets)
-        outputView.displayNumberOfLottoTickets(lotto)
-        lotto.generateTickets()
+        val lotto = Lotto(purchaseAmount, manualTickets)
+        outputView.displayNumberOfLottoTickets(lotto, manualTicketsAmount)
+        lotto.generateTickets(manualTicketsAmount)
         outputView.displayTickets(lotto)
         return lotto
     }
@@ -39,12 +36,12 @@ class Controller {
     private fun handleWinningNumbers(
         inputView: InputView,
         outputView: OutputView,
-    ): Pair<UserMainNumbers, UserBonusNumber> {
+    ): WinningNumbers {
         val userMainNumbers = inputView.getWinningNumbers()
         outputView.displayTicketNumbers(userMainNumbers.numbers)
         val bonusNumber = inputView.getBonusNumber(userMainNumbers)
         outputView.displayBonusNumber(bonusNumber)
-        return Pair(userMainNumbers, bonusNumber)
+        return WinningNumbers(userMainNumbers, bonusNumber)
     }
 
     private fun handleResultDisplay(
